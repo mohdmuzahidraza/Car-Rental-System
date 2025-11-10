@@ -1,0 +1,41 @@
+    <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Customers</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a href="/cars">Cars</a>
+    <a href="/customers">Customers</a>
+    <a href="/rentals">Rentals</a>
+    <a href="/reports">Reports</a>
+  </div>
+  <div class="container">
+    <h2>Customers</h2>
+    <form action="/customers/add" method="post">
+      <input name="name" placeholder="Customer Name" required>
+      <input name="email" placeholder="Email" required>
+      <button type="submit">Add Customer</button>
+    </form>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr th:each="c : ${customers}">
+          <td th:text="${c.id}"></td>
+          <td th:text="${c.name}"></td>
+          <td th:text="${c.email}"></td>
+          <td>
+            <form action="/customers/delete" method="post" style="display:inline">
+              <input type="hidden" name="id" th:value="${c.id}"/>
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

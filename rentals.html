@@ -1,0 +1,52 @@
+    <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Rentals</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a href="/cars">Cars</a>
+    <a href="/customers">Customers</a>
+    <a href="/rentals">Rentals</a>
+    <a href="/reports">Reports</a>
+  </div>
+  <div class="container">
+    <h2>Rentals</h2>
+    <h3>Rent a car</h3>
+    <form action="/rentals/rent" method="post">
+      <select name="customerId" required>
+        <option value="" disabled selected>Select customer</option>
+        <option th:each="cust : ${customers}" th:value="${cust.id}" th:text="${cust.name}"></option>
+      </select>
+      <select name="carId" required>
+        <option value="" disabled selected>Select car</option>
+        <option th:each="car : ${cars}" th:value="${car.id}" th:text="${car.name + ' - ' + car.amountPerDay + '/day (' + (car.available ? 'Available' : 'Rented') + ')' }"></option>
+      </select>
+      <button type="submit">Rent</button>
+    </form>
+
+    <h3>Current Rentals</h3>
+    <table>
+      <thead><tr><th>ID</th><th>Customer</th><th>Car</th><th>Rent Date</th><th>Return Date</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr th:each="r : ${rentals}">
+          <td th:text="${r.id}"></td>
+          <td th:text="${custMap[r.customerId] != null ? custMap[r.customerId].name : 'Unknown'}"></td>
+          <td th:text="${carsMap[r.carId] != null ? carsMap[r.carId].name : 'Unknown'}"></td>
+          <td th:text="${r.rentDate}"></td>
+          <td th:text="${r.returnDate}"></td>
+          <td>
+            <form action="/rentals/return" method="post">
+              <input type="hidden" name="id" th:value="${r.id}"/>
+              <button type="submit">Return</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
